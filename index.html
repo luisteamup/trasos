@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Trasos: directorio de donatarias, crowdfunding y corpfunding para Organizaciones de la Sociedad Civil.">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Trasos Marketplace</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap">
+<style>
+/* Layout: banda cielo (tesis) → cómo funciona (crowd / corp) → directorio filtrable → franjas de registro OSC y corporativo */
+:root{
+  --sky:#95bbdc; --sky-soft:#dbe8f4; --navy:#1d3461; --blue:#3277b8; --coral:#e5534b; --coral-ink:#c23b33;
+  --paper:#f5f8fc; --card:#ffffff; --ink:#1a2a47; --muted:#4f6283; --line:#d4e0ee; --on-dark:#f5f8fc; --on-dark-muted:#c9d7ea;
+  --ok:#2f7d5b; --ok-soft:#dff1e8; --warn:#9a6a12; --warn-soft:#f8ecd2;
+  --display:"Poppins",system-ui,sans-serif; --body:"Nunito Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --sky:#1f3b66; --sky-soft:#1a2d4f; --navy:#0e1a33; --blue:#7fb2e3; --coral:#f07068; --coral-ink:#f39b95;
+  --paper:#111d33; --card:#18284a; --ink:#e8eef7; --muted:#a9b8d0; --line:#2a3d62; --on-dark:#f5f8fc; --on-dark-muted:#b9c8de;
+  --ok:#7fd1aa; --ok-soft:#173a2d; --warn:#f0c46b; --warn-soft:#3a2f17; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --sky:#1f3b66; --sky-soft:#1a2d4f; --navy:#0e1a33; --blue:#7fb2e3; --coral:#f07068; --coral-ink:#f39b95;
+  --paper:#111d33; --card:#18284a; --ink:#e8eef7; --muted:#a9b8d0; --line:#2a3d62; --on-dark:#f5f8fc; --on-dark-muted:#b9c8de;
+  --ok:#7fd1aa; --ok-soft:#173a2d; --warn:#f0c46b; --warn-soft:#3a2f17; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--navy)}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+h2{font-size:clamp(26px,4vw,36px)}
+h3{font-size:19px}
+p{margin:0}
+a{color:var(--blue)}
+.eyebrow{font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+section{padding-block:64px}
+.lead{color:var(--muted);max-width:62ch;margin-top:12px}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--navy);color:var(--on-dark)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:.04em;color:var(--on-dark);text-decoration:none}
+.brand span{color:var(--coral)}
+.nav nav{display:flex;gap:18px;flex-wrap:wrap}
+.nav nav a{color:var(--on-dark-muted);text-decoration:none;font-weight:600;font-size:15px}
+.nav nav a:hover,.nav nav a:focus-visible{color:var(--on-dark)}
+
+/* hero */
+.hero{background:var(--sky)}
+.hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;padding-block:64px}
+.hero h1{font-size:clamp(36px,6vw,60px);color:var(--navy)}
+:root[data-theme="dark"] .hero h1{color:var(--on-dark)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hero h1{color:var(--on-dark)}}
+.hero .lead{color:var(--ink);font-size:19px;max-width:40ch}
+.hero .eyebrow{color:var(--ink);opacity:.85}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--display);font-weight:600;font-size:16px;padding:12px 22px;border-radius:999px;text-decoration:none;border:2px solid transparent;cursor:pointer;line-height:1.2}
+.btn-primary{background:var(--coral);color:#fff}
+.btn-dark{background:var(--navy);color:var(--on-dark)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:currentColor}
+.btn-sm{font-size:14px;padding:8px 14px}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.stats{display:flex;gap:28px;margin-top:28px;flex-wrap:wrap}
+.stat b{display:block;font-family:var(--display);font-size:30px;color:var(--navy);font-variant-numeric:tabular-nums;line-height:1.1}
+:root[data-theme="dark"] .stat b{color:var(--on-dark)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .stat b{color:var(--on-dark)}}
+.stat span{font-size:14px;color:var(--ink)}
+.hero svg{width:100%;max-width:420px;justify-self:center}
+
+/* how */
+.grid{display:grid;gap:20px;margin-top:32px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card p{color:var(--muted);font-size:16px}
+.model{padding:28px}
+.model h3{font-size:24px}
+.model ol{margin:6px 0 0;padding-left:20px;color:var(--muted);display:flex;flex-direction:column;gap:6px}
+.tag{align-self:flex-start;font-family:var(--display);font-weight:600;font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--sky-soft);color:var(--ink)}
+.tag.coral{background:var(--coral);color:#fff}
+.price{font-family:var(--display);font-weight:700;font-size:28px;color:var(--ink)}
+
+/* directory */
+.alt{background:var(--sky-soft)}
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin-top:28px}
+label{font-weight:600;font-size:14px;display:flex;flex-direction:column;gap:6px;color:var(--ink)}
+input,select,textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%;min-width:0}
+textarea{min-height:96px;resize:vertical}
+.count{margin-top:16px;font-size:14px;color:var(--muted)}
+.osc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:16px}
+.osc{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.osc .top{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.osc h3{font-size:20px;overflow-wrap:anywhere}
+.osc .where{font-size:14px;color:var(--muted)}
+.osc .desc{font-size:15px;color:var(--muted);overflow-wrap:anywhere}
+.osc .proj{font-size:15px;background:var(--paper);border-radius:12px;padding:10px 12px;overflow-wrap:anywhere}
+.osc .proj b{font-family:var(--display);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);display:block}
+.osc .goal{font-family:var(--display);font-weight:600;font-variant-numeric:tabular-nums}
+.osc .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:6px}
+.badge{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.badge.ok{background:var(--ok-soft);color:var(--ok)}
+.badge.warn{background:var(--warn-soft);color:var(--warn)}
+.badge.none{background:var(--paper);color:var(--muted)}
+.empty{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;background:var(--card);border:1px dashed var(--line);border-radius:18px;padding:28px}
+.empty .osc{border-style:dashed;opacity:.92}
+.sample-flag{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--coral-ink)}
+
+/* forms */
+.band{background:var(--navy);color:var(--on-dark)}
+.band h2{color:var(--on-dark)}
+.band .lead{color:var(--on-dark-muted)}
+.band .eyebrow{color:#9bc1e6}
+.split{display:grid;grid-template-columns:.9fr 1.1fr;gap:40px;align-items:start}
+.checks{list-style:none;padding:0;margin:20px 0 0;display:flex;flex-direction:column;gap:10px}
+.checks li{display:flex;gap:10px;align-items:flex-start}
+.checks li::before{content:"";flex:none;width:10px;height:10px;border-radius:50%;background:var(--coral);margin-top:8px}
+.band .checks li{color:var(--on-dark-muted)}
+.form{background:var(--card);color:var(--ink);border-radius:20px;padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form .full{grid-column:1 / -1}
+.form .hint{font-weight:400;font-size:13px;color:var(--muted)}
+.form .msg{grid-column:1 / -1;font-size:15px;font-weight:600;min-height:1.4em}
+.form .msg.ok{color:var(--ok)} .form .msg.err{color:var(--coral-ink)}
+.ext{background:var(--card);color:var(--ink);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:14px}
+.ext p{color:var(--muted)}
+.live-only{display:none}
+body.live .live-only{display:revert}
+body.live .form.live-only{display:grid}
+body.live .static-only{display:none}
+
+/* admin */
+.admin{margin-top:28px}
+.table-wrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:16px;margin-top:14px}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:15px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--display);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+tbody tr:last-child td{border-bottom:none}
+
+footer{padding-block:28px;font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:900px){
+  .hero .wrap,.split{grid-template-columns:1fr}
+  .hero svg{max-width:280px}
+  .osc-grid,.g3{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .empty{grid-template-columns:1fr}
+}
+@media (max-width:600px){
+  .osc-grid,.g2,.g3,.filters,.form{grid-template-columns:1fr}
+  .nav nav{gap:12px}
+}
+@media (prefers-reduced-motion:no-preference){.btn{transition:transform .15s ease}.btn:hover{transform:translateY(-1px)}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#inicio">TRAS<span>OS</span></a>
+    <nav aria-label="Secciones">
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#directorio">Directorio</a>
+      <a href="#registra-osc">Registra tu OSC</a>
+      <a href="#corporativos">Corporativos</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="inicio" style="padding-block:0">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Crowdfunding y Corpfunding para la sociedad civil</p>
+      <h1>Financiamiento colaborativo para OSCs que quieren trascender</h1>
+      <p class="lead">Un directorio de donatarias donde personas y corporativos con metas ESG encuentran causas, donan y apadrinan su transformación.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="#directorio" id="cta-explorar">Explorar donatarias</a>
+        <a class="btn btn-ghost" href="#corporativos" id="cta-corp">Soy corporativo</a>
+      </div>
+      <div class="stats" aria-live="polite">
+        <div class="stat"><b id="stat-osc">0</b><span>OSCs en el directorio</span></div>
+        <div class="stat"><b id="stat-causas">0</b><span>causas representadas</span></div>
+        <div class="stat"><b id="stat-estados">0</b><span>estados</span></div>
+      </div>
+    </div>
+    <svg viewBox="0 0 420 360" role="img" aria-label="Ilustración: un edificio corporativo y una OSC conectados por un puente de donativos">
+      <circle cx="210" cy="190" r="160" fill="#f5f8fc" opacity=".55"/>
+      <ellipse cx="330" cy="70" rx="40" ry="18" fill="#ffffff"/><ellipse cx="356" cy="60" rx="26" ry="20" fill="#ffffff"/>
+      <rect x="54" y="110" width="110" height="200" rx="5" fill="#1d3461"/>
+      <rect x="100" y="88" width="18" height="22" fill="#1d3461"/>
+      <g fill="#95bbdc"><rect x="68" y="128" width="18" height="14" rx="2"/><rect x="100" y="128" width="18" height="14" rx="2"/><rect x="132" y="128" width="18" height="14" rx="2"/><rect x="68" y="158" width="18" height="14" rx="2"/><rect x="100" y="158" width="18" height="14" rx="2" fill="#f5f8fc"/><rect x="132" y="158" width="18" height="14" rx="2"/><rect x="68" y="188" width="18" height="14" rx="2" fill="#f5f8fc"/><rect x="100" y="188" width="18" height="14" rx="2"/><rect x="132" y="188" width="18" height="14" rx="2"/><rect x="68" y="218" width="18" height="14" rx="2"/><rect x="100" y="218" width="18" height="14" rx="2"/><rect x="132" y="218" width="18" height="14" rx="2" fill="#f5f8fc"/></g>
+      <rect x="94" y="260" width="30" height="50" rx="3" fill="#3277b8"/>
+      <path d="M164 150 Q 236 50 300 190" stroke="#e5534b" stroke-width="5" fill="none" stroke-dasharray="11 9" stroke-linecap="round"/>
+      <circle cx="200" cy="106" r="15" fill="#e5534b"/><circle cx="200" cy="106" r="8" fill="none" stroke="#fff" stroke-width="3"/>
+      <circle cx="246" cy="100" r="15" fill="#e5534b"/><circle cx="246" cy="100" r="8" fill="none" stroke="#fff" stroke-width="3"/>
+      <rect x="262" y="214" width="118" height="96" rx="5" fill="#3277b8"/>
+      <path d="M252 218 L321 168 L390 218 Z" fill="#e5534b"/>
+      <rect x="308" y="262" width="26" height="48" rx="3" fill="#1d3461"/>
+      <path d="M321 250 C321 250 302 238 302 227 C302 220 308 216 313 216 C318 216 321 221 321 221 C321 221 324 216 329 216 C334 216 340 220 340 227 C340 238 321 250 321 250 Z" fill="#fff"/>
+      <rect x="30" y="308" width="370" height="9" rx="4.5" fill="#1d3461"/>
+    </svg>
+  </div>
+</section>
+
+<main>
+  <section id="como-funciona">
+    <div class="wrap">
+      <p class="eyebrow">Cómo funciona</p>
+      <h2>Dos formas de financiar a una OSC</h2>
+      <div class="grid g2">
+        <div class="card model">
+          <span class="tag">Crowdfunding</span>
+          <h3>Personas que donan a una causa</h3>
+          <ol>
+            <li>Explora el directorio y filtra por causa o estado.</li>
+            <li>Elige una donataria y su proyecto.</li>
+            <li>Dona directo a la OSC desde su link de donación.</li>
+          </ol>
+        </div>
+        <div class="card model">
+          <span class="tag coral">Corpfunding</span>
+          <h3>Corporativos que apadrinan una transformación</h3>
+          <ol>
+            <li>Registra tu empresa, tus metas ESG y las causas que te interesan.</li>
+            <li>Trasos te vincula con una OSC del directorio.</li>
+            <li>Apadrinas su transformación y recibes resultados medidos durante todo el proyecto.</li>
+          </ol>
+          <p class="price">$300,000 MXN + IVA <span style="font-size:16px;font-weight:500;color:var(--muted)">· 3 meses por OSC</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="directorio">
+    <div class="wrap">
+      <p class="eyebrow">Directorio de donatarias</p>
+      <h2>Encuentra una causa para apoyar</h2>
+      <div class="filters" role="search">
+        <label for="f-q">Buscar<input id="f-q" type="search" placeholder="Nombre, proyecto o palabra clave" autocomplete="off"></label>
+        <label for="f-causa">Causa<select id="f-causa"><option value="">Todas</option></select></label>
+        <label for="f-estado">Estado<select id="f-estado"><option value="">Todos</option></select></label>
+      </div>
+      <p class="count" id="count" aria-live="polite"></p>
+      <div class="osc-grid" id="osc-grid"></div>
+      <div class="empty" id="empty" hidden>
+        <div>
+          <h3 style="font-size:22px">Aún no hay donatarias en el directorio</h3>
+          <p style="color:var(--muted);margin-top:8px">Las OSCs que se registren aparecerán aquí de inmediato. Así se verá cada ficha.</p>
+          <div class="actions"><a class="btn btn-primary" href="#registra-osc">Registrar mi OSC</a></div>
+        </div>
+        <article class="osc" aria-label="Ficha de ejemplo">
+          <span class="sample-flag">Ficha de ejemplo</span>
+          <div class="top"><span class="tag">Educación</span><span class="badge ok">Donataria autorizada</span></div>
+          <h3>Nombre de tu OSC</h3>
+          <p class="where">Municipio, Estado</p>
+          <p class="desc">Una o dos líneas sobre la misión de la organización.</p>
+          <p class="proj"><b>Proyecto a financiar</b>El proyecto para el que buscas fondos.</p>
+          <p class="goal">Meta: $000,000 MXN</p>
+          <div class="btns"><span class="btn btn-primary btn-sm" aria-hidden="true">Donar</span><span class="btn btn-ghost btn-sm" aria-hidden="true">Apadrinar</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="registra-osc">
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow">Para donatarias</p>
+        <h2>Registra tu OSC en el directorio</h2>
+        <p class="lead">Tu ficha se publica al instante y la ven personas y corporativos que buscan causas para financiar.</p>
+        <ul class="checks">
+          <li>Visibilidad ante corporativos con presupuesto ESG.</li>
+          <li>Tu propio link de donación en tu ficha.</li>
+          <li>Opción de ser apadrinada para un proyecto de transformación Trasos.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="ext static-only">
+          <h3 style="font-size:22px">Formulario de registro de OSC</h3>
+          <p>Te pedimos datos de la organización, su causa, el proyecto a financiar y un link de donación. Toma unos 5 minutos.</p>
+          <div><a class="btn btn-primary" id="osc-ext" href="#" target="_blank" rel="noopener">Abrir formulario de OSC</a></div>
+          <p style="font-size:14px">Se abre en Google Forms. Tu ficha aparece en el directorio en la siguiente actualización.</p>
+        </div>
+        <form class="form live-only" id="osc-form" novalidate>
+          <label class="full" for="o-nombre">Nombre de la OSC *<input id="o-nombre" name="nombre" required maxlength="120"></label>
+          <label for="o-causa">Causa principal *<select id="o-causa" name="causa" required><option value="">Elige una</option></select></label>
+          <label for="o-donataria">Donataria autorizada (SAT) *<select id="o-donataria" name="donataria" required><option value="">Elige una</option><option>Sí</option><option>En trámite</option><option>No</option></select></label>
+          <label for="o-estado">Estado *<select id="o-estado" name="estado" required><option value="">Elige uno</option></select></label>
+          <label for="o-municipio">Municipio<input id="o-municipio" name="municipio" maxlength="80"></label>
+          <label class="full" for="o-desc">Misión en una o dos líneas *<textarea id="o-desc" name="descripcion" required maxlength="280"></textarea></label>
+          <label class="full" for="o-proyecto">Proyecto a financiar *<input id="o-proyecto" name="proyecto" required maxlength="160"></label>
+          <label for="o-meta">Meta de recaudación (MXN)<input id="o-meta" name="meta" type="number" min="0" step="1000" inputmode="numeric"></label>
+          <label for="o-rfc">RFC<input id="o-rfc" name="rfc" maxlength="13" autocapitalize="characters"></label>
+          <label class="full" for="o-link">Link de donación<span class="hint">Mercado Pago, Stripe, PayPal o página de donativos. Debe empezar con https://</span><input id="o-link" name="linkDonacion" type="url" placeholder="https://"></label>
+          <label class="full" for="o-web">Sitio web o redes<input id="o-web" name="web" type="url" placeholder="https://"></label>
+          <label for="o-contacto">Nombre de contacto *<input id="o-contacto" name="contacto" required maxlength="80"></label>
+          <label for="o-correo">Correo de contacto *<input id="o-correo" name="correo" type="email" required></label>
+          <label for="o-tel">Teléfono<input id="o-tel" name="telefono" type="tel" maxlength="20"></label>
+          <div style="display:flex;align-items:flex-end"><button class="btn btn-primary" type="submit" id="o-submit">Publicar ficha</button></div>
+          <p class="msg" id="o-msg" role="status"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="corporativos">
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow">Para corporativos</p>
+        <h2>Convierte tu presupuesto ESG en impacto medible</h2>
+        <p class="lead">Para empresas con compromisos y KPIs ESG, presupuesto asignado y sin un proyecto social en marcha.</p>
+        <ul class="checks">
+          <li>Apadrina la transformación de una OSC: $300,000 MXN + IVA, 3 meses.</li>
+          <li>Mes 1: diagnóstico y mapa de ruta. Meses 2 y 3: donación y quick wins tecnológicos.</li>
+          <li>Medición constante y reportes de avance para tu informe ESG.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="ext static-only">
+          <h3 style="font-size:22px">Registro de corporativo donante</h3>
+          <p>Cuéntanos sobre tu empresa, tus metas ESG, las causas que te interesan y tu presupuesto aproximado. Te contactamos para proponerte una OSC.</p>
+          <div><a class="btn btn-primary" id="corp-ext" href="#" target="_blank" rel="noopener">Abrir formulario de corporativo</a></div>
+          <p style="font-size:14px">Se abre en Google Forms.</p>
+        </div>
+        <form class="form live-only" id="corp-form" novalidate>
+          <label class="full" for="c-empresa">Empresa *<input id="c-empresa" name="empresa" required maxlength="120"></label>
+          <label for="c-sector">Sector<input id="c-sector" name="sector" maxlength="80"></label>
+          <label for="c-presupuesto">Presupuesto anual ESG aprox.<select id="c-presupuesto" name="presupuesto"><option value="">Prefiero no decir</option><option>Menos de $300,000</option><option>$300,000 a $1,000,000</option><option>$1,000,000 a $5,000,000</option><option>Más de $5,000,000</option></select></label>
+          <label class="full" for="c-metas">Metas o KPIs ESG que buscan cumplir *<textarea id="c-metas" name="metasESG" required maxlength="400" placeholder="Ej. ODS 4 Educación de calidad, horas de voluntariado, beneficiarios atendidos…"></textarea></label>
+          <label for="c-causa">Causa de interés<select id="c-causa" name="causa"><option value="">Cualquiera</option></select></label>
+          <label for="c-modalidad">Modalidad *<select id="c-modalidad" name="modalidad" required><option value="">Elige una</option><option>Apadrinar una transformación</option><option>Donar a un proyecto</option><option>Ambas</option></select></label>
+          <label class="full" for="c-osc">OSC de interés<span class="hint">Opcional. Se llena solo si eliges “Apadrinar” en una ficha.</span><input id="c-osc" name="oscInteres" maxlength="120"></label>
+          <label for="c-contacto">Nombre y cargo *<input id="c-contacto" name="contacto" required maxlength="120"></label>
+          <label for="c-correo">Correo *<input id="c-correo" name="correo" type="email" required></label>
+          <label for="c-tel">Teléfono<input id="c-tel" name="telefono" type="tel" maxlength="20"></label>
+          <div style="display:flex;align-items:flex-end"><button class="btn btn-primary" type="submit" id="c-submit">Enviar registro</button></div>
+          <p class="msg" id="c-msg" role="status"></p>
+        </form>
+      </div>
+    </div>
+    <div class="wrap admin" id="admin" hidden>
+      <h3 style="font-size:22px;color:var(--on-dark)">Corporativos registrados <span class="tag" style="margin-left:8px" id="corp-count">0</span></h3>
+      <p style="color:var(--on-dark-muted);font-size:15px;margin-top:6px">Solo lo ven los editores de esta página.</p>
+      <div class="table-wrap"><table><thead><tr><th>Empresa</th><th>Modalidad</th><th>Causa</th><th>OSC de interés</th><th>Metas ESG</th><th>Contacto</th><th>Fecha</th></tr></thead><tbody id="corp-rows"></tbody></table></div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>TRASOS · Transformación y Sostenibilidad para Organizaciones de la Sociedad Civil</span><span id="mode-note">Directorio actualizado periódicamente</span></div></footer>
+
+<script>
+(function(){
+  // Formularios públicos (Google Forms) y fichas sincronizadas desde sus respuestas.
+  var FORMS = {
+    osc: "https://docs.google.com/forms/d/1xEib7MiARAWX8bGy90NlGzmPxdHBN_mmnIDKrE0dHN8/viewform",
+    corp: "https://docs.google.com/forms/d/13wDni2cKsti0MlNhSiJe-bfr8EHkItsHyZ7gy7mTdlo/viewform"
+  };
+  var STATIC_OSCS = []; // se llena al sincronizar la hoja de respuestas del formulario de OSC
+
+  var CAUSAS = ["Educación","Salud","Medio ambiente","Niñez y juventud","Mujeres y equidad","Inclusión y discapacidad","Desarrollo comunitario","Asistencia social","Cultura y arte","Derechos humanos","Animales","Otra"];
+  var ESTADOS = ["Aguascalientes","Baja California","Baja California Sur","Campeche","Chiapas","Chihuahua","Ciudad de México","Coahuila","Colima","Durango","Estado de México","Guanajuato","Guerrero","Hidalgo","Jalisco","Michoacán","Morelos","Nayarit","Nuevo León","Oaxaca","Puebla","Querétaro","Quintana Roo","San Luis Potosí","Sinaloa","Sonora","Tabasco","Tamaulipas","Tlaxcala","Veracruz","Yucatán","Zacatecas"];
+
+  var $ = function(id){ return document.getElementById(id); };
+  var oscs = STATIC_OSCS.slice();
+  var live = false, db = null, uid = null;
+
+  function fill(sel, list){ list.forEach(function(v){ var o=document.createElement("option"); o.textContent=v; o.value=v; sel.appendChild(o); }); }
+  fill($("f-causa"), CAUSAS); fill($("f-estado"), ESTADOS);
+  fill($("o-causa"), CAUSAS); fill($("o-estado"), ESTADOS); fill($("c-causa"), CAUSAS);
+  $("osc-ext").href = FORMS.osc; $("corp-ext").href = FORMS.corp;
+
+  function safeUrl(u){ try{ var x=new URL(String(u||"")); return x.protocol==="https:" ? x.href : ""; }catch(e){ return ""; } }
+  function str(v, n){ return String(v==null?"":v).slice(0, n||400); }
+  function money(n){ var v=Number(n); return v>0 ? "$"+v.toLocaleString("es-MX",{maximumFractionDigits:0})+" MXN" : ""; }
+  function norm(s){ return String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,""); }
+  function el(tag, cls, text){ var e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+
+  function card(o){
+    var a = el("article","osc");
+    var top = el("div","top");
+    top.appendChild(el("span","tag", str(o.causa,40) || "Otra"));
+    var d = str(o.donataria,20);
+    var b = el("span","badge " + (d==="Sí"?"ok":d==="En trámite"?"warn":"none"), d==="Sí"?"Donataria autorizada":d==="En trámite"?"Donataria en trámite":"Sin autorización SAT");
+    top.appendChild(b); a.appendChild(top);
+    a.appendChild(el("h3", null, str(o.nombre,120)));
+    var where = [str(o.municipio,80), str(o.estado,40)].filter(Boolean).join(", ");
+    if(where) a.appendChild(el("p","where", where));
+    if(o.descripcion) a.appendChild(el("p","desc", str(o.descripcion,280)));
+    if(o.proyecto){ var p=el("p","proj"); p.appendChild(el("b",null,"Proyecto a financiar")); p.appendChild(document.createTextNode(str(o.proyecto,160))); a.appendChild(p); }
+    var m = money(o.meta); if(m) a.appendChild(el("p","goal","Meta: "+m));
+    var btns = el("div","btns");
+    var link = safeUrl(o.linkDonacion);
+    if(link){ var don=el("a","btn btn-primary btn-sm","Donar"); don.href=link; don.target="_blank"; don.rel="noopener"; don.setAttribute("aria-label","Donar a "+str(o.nombre,120)); btns.appendChild(don); }
+    var ap = el("a","btn btn-ghost btn-sm","Apadrinar");
+    ap.setAttribute("aria-label","Apadrinar a "+str(o.nombre,120));
+    if(live){ ap.href="#corporativos"; ap.addEventListener("click", function(){ $("c-osc").value = str(o.nombre,120); $("c-modalidad").value = "Apadrinar una transformación"; setTimeout(function(){ $("c-empresa").focus(); }, 300); }); }
+    else { ap.href=FORMS.corp; ap.target="_blank"; ap.rel="noopener"; }
+    btns.appendChild(ap);
+    var web = safeUrl(o.web);
+    if(web){ var w=el("a","btn btn-ghost btn-sm","Sitio"); w.href=web; w.target="_blank"; w.rel="noopener"; btns.appendChild(w); }
+    a.appendChild(btns);
+    return a;
+  }
+
+  function render(){
+    var q = norm($("f-q").value), c = $("f-causa").value, s = $("f-estado").value;
+    var list = oscs.filter(function(o){
+      if(c && o.causa!==c) return false;
+      if(s && o.estado!==s) return false;
+      if(q){ var hay = norm([o.nombre,o.proyecto,o.descripcion,o.municipio].join(" ")); if(hay.indexOf(q)<0) return false; }
+      return true;
+    });
+    var grid = $("osc-grid"); grid.textContent = "";
+    list.forEach(function(o){ grid.appendChild(card(o)); });
+    $("empty").hidden = oscs.length>0;
+    $("count").textContent = oscs.length ? (list.length===oscs.length ? oscs.length+" donatarias" : list.length+" de "+oscs.length+" donatarias") : "";
+    if(oscs.length && !list.length) $("count").textContent = "Ninguna donataria coincide con estos filtros.";
+    $("stat-osc").textContent = oscs.length;
+    $("stat-causas").textContent = new Set(oscs.map(function(o){return o.causa}).filter(Boolean)).size;
+    $("stat-estados").textContent = new Set(oscs.map(function(o){return o.estado}).filter(Boolean)).size;
+  }
+  ["f-q","f-causa","f-estado"].forEach(function(id){ $(id).addEventListener("input", render); });
+  render();
+
+  function collect(form){ var o={}; Array.prototype.forEach.call(form.elements, function(f){ if(f.name) o[f.name]=f.value.trim(); }); return o; }
+  function check(form, msg){
+    var bad = Array.prototype.filter.call(form.elements, function(f){ return f.name && !f.checkValidity(); });
+    if(bad.length){ msg.className="msg err"; msg.textContent="Revisa los campos marcados con * y los enlaces (deben empezar con https://)."; bad[0].focus(); return false; }
+    return true;
+  }
+
+  $("osc-form").addEventListener("submit", function(ev){
+    ev.preventDefault(); var msg=$("o-msg"), form=ev.target;
+    if(!db){ return; }
+    if(!check(form,msg)) return;
+    var d = collect(form);
+    if(d.linkDonacion && !safeUrl(d.linkDonacion)){ msg.className="msg err"; msg.textContent="El link de donación debe empezar con https://"; return; }
+    d.meta = d.meta ? Number(d.meta) : null; d.creado = new Date().toISOString();
+    $("o-submit").disabled = true; msg.className="msg"; msg.textContent="Publicando…";
+    db.collection("osc").add(d).then(function(){
+      form.reset(); msg.className="msg ok"; msg.textContent="Listo. Tu ficha ya está en el directorio.";
+    }).catch(function(e){
+      msg.className="msg err"; msg.textContent = e && e.code==="quota_exceeded" ? "El directorio llegó a su capacidad. Escríbenos para ampliarla." : "No se pudo publicar. Intenta de nuevo en un momento.";
+    }).finally(function(){ $("o-submit").disabled = false; });
+  });
+
+  $("corp-form").addEventListener("submit", function(ev){
+    ev.preventDefault(); var msg=$("c-msg"), form=ev.target;
+    if(!db) return;
+    if(!uid){ msg.className="msg err"; msg.textContent="Inicia sesión en claude.ai para enviar tu registro."; return; }
+    if(!check(form,msg)) return;
+    var d = collect(form); d.creado = new Date().toISOString();
+    $("c-submit").disabled = true; msg.className="msg"; msg.textContent="Enviando…";
+    db.doc("corporativos/"+uid).set(d).then(function(){
+      form.reset(); msg.className="msg ok"; msg.textContent="Gracias. Recibimos tu registro y te contactaremos para proponerte una OSC.";
+    }).catch(function(){
+      msg.className="msg err"; msg.textContent="No se pudo enviar. Intenta de nuevo en un momento.";
+    }).finally(function(){ $("c-submit").disabled = false; });
+  });
+
+  function renderCorps(snap){
+    var body=$("corp-rows"); body.textContent="";
+    $("corp-count").textContent = snap.size;
+    snap.docs.forEach(function(doc){
+      var c = doc.data()||{}; var tr=document.createElement("tr");
+      [c.empresa, c.modalidad, c.causa||"Cualquiera", c.oscInteres||"—", c.metasESG, [c.contacto,c.correo,c.telefono].filter(Boolean).join(" · "), c.creado ? new Date(c.creado).toLocaleDateString("es-MX") : ""].forEach(function(v){ tr.appendChild(el("td",null,str(v,400))); });
+      body.appendChild(tr);
+    });
+    if(!snap.size){ var tr=document.createElement("tr"); var td=el("td",null,"Aún no hay corporativos registrados."); td.colSpan=7; tr.appendChild(td); body.appendChild(tr); }
+  }
+
+  async function goLive(){
+    var c = window.claude; if(!c || !c.use) return;
+    try{ db = await c.use("db"); }catch(e){ db=null; }
+    if(!db) return;
+    live = true; document.body.classList.add("live");
+    $("mode-note").textContent = "Directorio en vivo";
+    try{ var user = await c.use("user"); if(user){ uid = await user.id(); if(user.canEdit && await user.canEdit()) startAdmin(); } }catch(e){}
+    db.collection("osc").orderBy("creado","desc").onSnapshot(function(snap){
+      oscs = snap.docs.map(function(d){ return d.data()||{}; }); render();
+    }, function(){ $("mode-note").textContent = "No se pudo conectar el directorio en vivo."; });
+  }
+  function startAdmin(){
+    $("admin").hidden = false;
+    db.collection("corporativos").orderBy("creado","desc").onSnapshot(renderCorps, function(){});
+  }
+  goLive();
+})();
+</script>
+</body>
+</html>
